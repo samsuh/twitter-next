@@ -10,7 +10,7 @@ export default function Home() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
-      <main>
+      <main className='flex min-h-screen max-w-7xl mx-auto'>
         {/* Sidebar */}
         <Sidebar />
         {/* Feed */}
