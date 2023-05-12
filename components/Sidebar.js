@@ -15,7 +15,7 @@ export default function Sidebar() {
   return (
     <div className='hidden sm:flex flex-col p-2 xl:items-start fixed h-full xl:ml-24'>
       {/* Logo */}
-      <div className='hoverEffect hover:bg-blue-100 p-2'>
+      <div className='hoverEffect hover:bg-blue-100 px-1'>
         <Image src='/twitter-logo.png' width='50' height='50' />
       </div>
       {/* Menu */}
