@@ -1,3 +1,5 @@
+This is a Twitter Clone using NextJS 13, Firebase (Firestore, Firebase Authentication), Recoil, TailwindCSS
+
 ## Getting Started
 
 First, run the development server:
