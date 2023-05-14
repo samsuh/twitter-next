@@ -1,7 +1,18 @@
 import { FaceSmileIcon, PhotoIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
+import { useRecoilState } from 'recoil'
+import { userState } from '../atom/userAtom'
+import { getAuth, signOut } from 'firebase/auth'
 
 export default function Input() {
+  //use FirebaseAuthentication "currentUser" instead of NextAuth "session.user"
+  const [currentUser, setCurrentUser] = useRecoilState(userState)
+  const auth = getAuth()
+  const onSignout = () => {
+    signOut(auth)
+    setCurrentUser(null)
+  }
+
   return (
     <div className='flex border-b border-gray-200 p-3 space-x-3'>
       <Image

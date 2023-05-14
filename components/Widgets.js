@@ -23,13 +23,11 @@ export default function Widgets({ newsResults, randomUserList }) {
       <div className='text-gray-700 bg-gray-100 space-y-3 rounded-xl pt-2 w-[90%] xl:w-[75%]'>
         <h4 className='font-bold text-xl px-4'>What's happening</h4>
         {newsResults.slice(0, articleNum).map((article) => (
-          <div>
-            <News
-              key={article.title}
-              article={article}
-              setArticleNum={setArticleNum}
-            />
-          </div>
+          <News
+            key={article.title}
+            article={article}
+            setArticleNum={setArticleNum}
+          />
         ))}
         <button
           className='text-blue-300 pl-4 pb-3 hover:text-blue-400 cursor-pointer'

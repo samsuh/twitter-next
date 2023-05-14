@@ -7,9 +7,13 @@ import {
   TrashIcon,
 } from '@heroicons/react/24/outline'
 import Image from 'next/image'
+import { useRecoilState } from 'recoil'
+import { modalState } from '../atom/modalAtom'
 
 export default function Post({ post }) {
   const { id, name, username, userImg, img, text, timestamp } = post
+  const [open, setOpen] = useRecoilState(modalState)
+
   return (
     <div className='flex p-3 cursor-pointer border-b border-gray-200'>
       <Image
@@ -42,7 +46,10 @@ export default function Post({ post }) {
           className='rounded-2xl mr-2'
         />
         <div className='flex justify-between text-gray-500 p-2'>
-          <ChatBubbleLeftIcon className='h-9 w-10 hoverEffect p-2 hover:text-sky-500 hover:bg-sky-100' />
+          <ChatBubbleLeftIcon
+            className='h-9 w-10 hoverEffect p-2 hover:text-sky-500 hover:bg-sky-100'
+            onClick={() => setOpen(!open)}
+          />
           <TrashIcon className='h-9 w-9 hoverEffect p-2 hover:text-red-600 hover:bg-red-100' />
           <HeartIcon className='h-9 w-9 hoverEffect p-2 hover:text-red-600 hover:bg-red-100' />
           <ShareIcon className='h-9 w-10 hoverEffect p-2 hover:text-sky-500 hover:bg-sky-100' />
