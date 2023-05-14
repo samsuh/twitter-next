@@ -9,15 +9,17 @@ import {
 import Image from 'next/image'
 import { useRecoilState } from 'recoil'
 import { modalState } from '../atom/modalAtom'
+import { userState } from '../atom/userAtom'
 
 export default function Post({ post }) {
   const { id, name, username, userImg, img, text, timestamp } = post
   const [open, setOpen] = useRecoilState(modalState)
+  const [currentUser, setCurrentUser] = useRecoilState(userState)
 
   return (
     <div className='flex p-3 cursor-pointer border-b border-gray-200'>
       <Image
-        src={userImg}
+        src={currentUser ? currentUser.userImg : '/user-default-img.png'}
         alt='user profile image'
         width='100'
         height='100'
