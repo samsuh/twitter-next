@@ -5,12 +5,14 @@ import { userState } from '../atom/userAtom'
 import { getAuth, signOut } from 'firebase/auth'
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
 import { db } from '../firebase'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 export default function Input() {
   //use FirebaseAuthentication "currentUser" instead of NextAuth "session.user"
   const [currentUser, setCurrentUser] = useRecoilState(userState)
   const [input, setInput] = useState('')
+  const filePickerRef = useRef(null)
+  const [selectedFile, setSelectedFile] = useState(null)
 
   const auth = getAuth()
   const onSignout = () => {
@@ -28,6 +30,17 @@ export default function Input() {
       username: currentUser.username,
     })
     setInput('')
+  }
+
+  const addImageToPost = (e) => {
+    const reader = new FileReader()
+    if (e.target.files[0]) {
+      reader.readAsDataURL(e.target.files[0])
+    }
+
+    reader.onload = (readerEvent) => {
+      setSelectedFile(readerEvent.target.result)
+    }
   }
 
   return (
@@ -55,7 +68,16 @@ export default function Input() {
             </div>
             <div className='flex items-center justify-between pt-2.5'>
               <div className='flex'>
-                <PhotoIcon className='h-10 w-10 hoverEffect p-2 text-sky-500 hover:bg-sky-100' />
+                {/* Add Photo To Post */}
+                <div onClick={() => filePickerRef.current.click()}>
+                  <PhotoIcon className='h-10 w-10 hoverEffect p-2 text-sky-500 hover:bg-sky-100' />
+                  <input
+                    type='file'
+                    hidden
+                    ref={filePickerRef}
+                    onClick={addImageToPost}
+                  />
+                </div>
                 <FaceSmileIcon className='h-10 w-10 hoverEffect p-2 text-sky-500 hover:bg-sky-100' />
               </div>
               <button
