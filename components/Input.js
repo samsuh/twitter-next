@@ -1,4 +1,8 @@
-import { FaceSmileIcon, PhotoIcon } from '@heroicons/react/24/outline'
+import {
+  FaceSmileIcon,
+  PhotoIcon,
+  XMarkIcon,
+} from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import { useRecoilState } from 'recoil'
 import { userState } from '../atom/userAtom'
@@ -48,6 +52,7 @@ export default function Input() {
     }
 
     setInput('')
+    setSelectedFile(null)
   }
 
   const addImageToPost = (e) => {
@@ -84,6 +89,15 @@ export default function Input() {
                 value={input}
               ></textarea>
             </div>
+            {selectedFile && (
+              <div className='relative'>
+                <XMarkIcon
+                  className='h-7 text-black absolute cursor-pointer bg-white rounded-full m-2'
+                  onClick={() => setSelectedFile(null)}
+                />
+                <img src={selectedFile} alt='selected image' />
+              </div>
+            )}
             <div className='flex items-center justify-between pt-2.5'>
               <div className='flex'>
                 {/* Add Photo To Post */}
@@ -93,7 +107,7 @@ export default function Input() {
                     type='file'
                     hidden
                     ref={filePickerRef}
-                    onClick={addImageToPost}
+                    onChange={addImageToPost}
                   />
                 </div>
                 <FaceSmileIcon className='h-10 w-10 hoverEffect p-2 text-sky-500 hover:bg-sky-100' />
