@@ -3,9 +3,16 @@ import Image from 'next/image'
 import { useRecoilState } from 'recoil'
 import { userState } from '../atom/userAtom'
 import { getAuth, signOut } from 'firebase/auth'
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
-import { db } from '../firebase'
+import {
+  addDoc,
+  collection,
+  doc,
+  serverTimestamp,
+  updateDoc,
+} from 'firebase/firestore'
+import { db, storage } from '../firebase'
 import { useRef, useState } from 'react'
+import { getDownloadURL, ref, uploadString } from 'firebase/storage'
 
 export default function Input() {
   //use FirebaseAuthentication "currentUser" instead of NextAuth "session.user"
@@ -29,6 +36,17 @@ export default function Input() {
       name: currentUser.name,
       username: currentUser.username,
     })
+
+    const imageRef = ref(storage, `posts/${docRef.id}/image`)
+    if (selectedFile) {
+      await uploadString(imageRef, selectedFile, 'data_url').then(async () => {
+        const downloadURL = await getDownloadURL(imageRef)
+        await updateDoc(doc(db, 'posts', docRef.id), {
+          image: downloadURL,
+        })
+      })
+    }
+
     setInput('')
   }
 
