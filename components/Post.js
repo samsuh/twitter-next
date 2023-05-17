@@ -10,9 +10,13 @@ import Image from 'next/image'
 import { useRecoilState } from 'recoil'
 import { modalState } from '../atom/modalAtom'
 import { userState } from '../atom/userAtom'
+import Moment from 'react-moment'
 
 export default function Post({ post }) {
-  const { id, name, username, userImg, img, text, timestamp } = post
+  console.log('post from Post Component', post)
+  // console.log('post.data()', post.data())
+  // const { id, name, username, userImg, img, text, timestamp } = post
+
   const [open, setOpen] = useRecoilState(modalState)
   const [currentUser, setCurrentUser] = useRecoilState(userState)
 
@@ -31,18 +35,22 @@ export default function Post({ post }) {
         <div className='flex items-center justify-between'>
           <div className='flex space-x-1 whitespace-nowrap items-center'>
             <h4 className='font-bold text-[15px] sm:text-[16px] hover:underline'>
-              {name}
+              {post.data().name}
             </h4>
-            <span className='text-sm sm:text-[15px]'>@{username} - </span>
+            <span className='text-sm sm:text-[15px]'>
+              @{post.data().username} -{' '}
+            </span>
             <span className='text-sm sm:text-[15px] hover:underline'>
-              {timestamp}
+              <Moment fromNow>{post?.data().timestamp?.toDate()}</Moment>
             </span>
           </div>
           <EllipsisHorizontalIcon className='h-10 hoverEffect w-10 hover:bg-sky-100 hover:text-sky-500 p-2' />
         </div>
-        <p className='text-gray-800 text-[15px] sm:text-[16px] mb-2'>{text}</p>
+        <p className='text-gray-800 text-[15px] sm:text-[16px] mb-2'>
+          {post.data().text}
+        </p>
         <Image
-          src={img}
+          src={post.data().image}
           width='500'
           height='350'
           className='rounded-2xl mr-2'
