@@ -102,12 +102,14 @@ export default function Post({ post }) {
         <p className='text-gray-800 text-[15px] sm:text-[16px] mb-2'>
           {post.data().text}
         </p>
-        <Image
-          src={post.data().image}
-          width='500'
-          height='350'
-          className='rounded-2xl mr-2'
-        />
+        {post.data().image && (
+          <Image
+            src={post.data().image}
+            width='500'
+            height='350'
+            className='rounded-2xl mr-2'
+          />
+        )}
         <div className='flex justify-between text-gray-500 p-2'>
           <ChatBubbleLeftIcon
             className='h-9 w-10 hoverEffect p-2 hover:text-sky-500 hover:bg-sky-100'
