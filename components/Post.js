@@ -6,11 +6,22 @@ import {
   ShareIcon,
   TrashIcon,
 } from '@heroicons/react/24/outline'
+import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid'
 import Image from 'next/image'
 import { useRecoilState } from 'recoil'
 import { modalState } from '../atom/modalAtom'
 import { userState } from '../atom/userAtom'
 import Moment from 'react-moment'
+import {
+  collection,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  setDoc,
+} from 'firebase/firestore'
+import { db } from '../firebase'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 
 export default function Post({ post }) {
   console.log('post from Post Component', post)
@@ -19,11 +30,41 @@ export default function Post({ post }) {
 
   const [open, setOpen] = useRecoilState(modalState)
   const [currentUser, setCurrentUser] = useRecoilState(userState)
+  const [likes, setLikes] = useState([])
+  const [hasLiked, setHasLiked] = useState(false)
+  const router = useRouter()
+
+  //get likes info from firestore
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      collection(db, 'posts', post.id, 'likes'),
+      (snapshot) => setLikes(snapshot.docs)
+    )
+  }, [db, post])
+
+  //check if currently logged in user has already liked this post
+  useEffect(() => {
+    setHasLiked(likes.findIndex((like) => like.id === currentUser?.uid) !== -1)
+  }, [likes, currentUser])
+
+  const likePost = async () => {
+    if (currentUser) {
+      if (hasLiked) {
+        await deleteDoc(doc(db, 'posts', post.id, 'likes', currentUser?.uid))
+      } else {
+        await setDoc(doc(db, 'posts', post.id, 'likes', currentUser?.uid), {
+          username: currentUser?.username,
+        })
+      }
+    } else {
+      router.push('/auth/SignIn')
+    }
+  }
 
   return (
     <div className='flex p-3 cursor-pointer border-b border-gray-200'>
       <Image
-        src={currentUser ? currentUser.userImg : '/user-default-img.png'}
+        src={currentUser ? currentUser?.userImg : '/user-default-img.png'}
         alt='user profile image'
         width='100'
         height='100'
@@ -61,7 +102,26 @@ export default function Post({ post }) {
             onClick={() => setOpen(!open)}
           />
           <TrashIcon className='h-9 w-9 hoverEffect p-2 hover:text-red-600 hover:bg-red-100' />
-          <HeartIcon className='h-9 w-9 hoverEffect p-2 hover:text-red-600 hover:bg-red-100' />
+          <div className='flex items-center'>
+            {hasLiked ? (
+              <HeartIconSolid
+                className='h-9 w-9 hoverEffect p-2 text-red-600 hover:bg-red-100'
+                onClick={likePost}
+              />
+            ) : (
+              <HeartIcon
+                className='h-9 w-9 hoverEffect p-2 hover:text-red-600 hover:bg-red-100'
+                onClick={likePost}
+              />
+            )}
+            {likes.length > 0 && (
+              <span
+                className={`${hasLiked && 'text-red-600'} text-sm select-none`}
+              >
+                {likes.length}
+              </span>
+            )}
+          </div>
           <ShareIcon className='h-9 w-10 hoverEffect p-2 hover:text-sky-500 hover:bg-sky-100' />
           <ChartBarIcon className='h-9 w-10 hoverEffect p-2 hover:text-sky-500 hover:bg-sky-100' />
         </div>
