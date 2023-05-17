@@ -19,9 +19,10 @@ import {
   onSnapshot,
   setDoc,
 } from 'firebase/firestore'
-import { db } from '../firebase'
+import { db, storage } from '../firebase'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import { deleteObject, ref } from 'firebase/storage'
 
 export default function Post({ post }) {
   console.log('post from Post Component', post)
@@ -58,6 +59,17 @@ export default function Post({ post }) {
       }
     } else {
       router.push('/auth/SignIn')
+    }
+  }
+
+  const deletePost = () => {
+    if (window.confirm('Are you sure you want to delete this post?')) {
+      //delete post
+      deleteDoc(doc(db, 'posts', post.id))
+      //clean up image from deleted post
+      if (post.data().image) {
+        deleteObject(ref(storage, `posts/${post.id}/image`))
+      }
     }
   }
 
@@ -101,7 +113,12 @@ export default function Post({ post }) {
             className='h-9 w-10 hoverEffect p-2 hover:text-sky-500 hover:bg-sky-100'
             onClick={() => setOpen(!open)}
           />
-          <TrashIcon className='h-9 w-9 hoverEffect p-2 hover:text-red-600 hover:bg-red-100' />
+          {currentUser?.id === post?.data().uid && (
+            <TrashIcon
+              className='h-9 w-9 hoverEffect p-2 hover:text-red-600 hover:bg-red-100'
+              onClick={deletePost}
+            />
+          )}
           <div className='flex items-center'>
             {hasLiked ? (
               <HeartIconSolid
