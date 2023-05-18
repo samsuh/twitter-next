@@ -9,7 +9,7 @@ import {
 import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid'
 import Image from 'next/image'
 import { useRecoilState } from 'recoil'
-import { modalState } from '../atom/modalAtom'
+import { modalState, postIdState } from '../atom/modalAtom'
 import { userState } from '../atom/userAtom'
 import Moment from 'react-moment'
 import {
@@ -25,12 +25,9 @@ import { useRouter } from 'next/router'
 import { deleteObject, ref } from 'firebase/storage'
 
 export default function Post({ post }) {
-  console.log('post from Post Component', post)
-  // console.log('post.data()', post.data())
-  // const { id, name, username, userImg, img, text, timestamp } = post
-
   const [open, setOpen] = useRecoilState(modalState)
   const [currentUser, setCurrentUser] = useRecoilState(userState)
+  const [postId, setPostId] = useRecoilState(postIdState)
   const [likes, setLikes] = useState([])
   const [hasLiked, setHasLiked] = useState(false)
   const router = useRouter()
@@ -113,7 +110,14 @@ export default function Post({ post }) {
         <div className='flex justify-between text-gray-500 p-2'>
           <ChatBubbleLeftIcon
             className='h-9 w-10 hoverEffect p-2 hover:text-sky-500 hover:bg-sky-100'
-            onClick={() => setOpen(!open)}
+            onClick={() => {
+              if (!currentUser) {
+                router.push('/auth/SignIn')
+              } else {
+                setOpen(!open)
+                setPostId(post.id)
+              }
+            }}
           />
           {currentUser?.id === post?.data().uid && (
             <TrashIcon
