@@ -73,7 +73,8 @@ export default function Post({ post }) {
   return (
     <div className='flex p-3 cursor-pointer border-b border-gray-200'>
       <Image
-        src={currentUser ? currentUser?.userImg : '/user-default-img.png'}
+        // src={currentUser ? currentUser?.userImg : '/user-default-img.png'} currently logged in user
+        src={post?.data()?.userImg} //userImg from the post in db
         alt='user profile image'
         width='100'
         height='100'
