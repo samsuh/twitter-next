@@ -7,11 +7,18 @@ import {
   XMarkIcon,
 } from '@heroicons/react/24/outline'
 import { useEffect, useState } from 'react'
-import { doc, onSnapshot } from 'firebase/firestore'
+import {
+  addDoc,
+  collection,
+  doc,
+  onSnapshot,
+  serverTimestamp,
+} from 'firebase/firestore'
 import { db } from '../firebase'
 import Image from 'next/image'
 import Moment from 'react-moment'
 import { userState } from '../atom/userAtom'
+import { useRouter } from 'next/router'
 
 export default function CommentModal() {
   const [open, setOpen] = useRecoilState(modalState)
@@ -19,6 +26,7 @@ export default function CommentModal() {
   const [post, setPost] = useState({})
   const [currentUser] = useRecoilState(userState)
   const [input, setInput] = useState('')
+  const router = useRouter()
 
   useEffect(() => {
     onSnapshot(doc(db, 'posts', postId), (snapshot) => {
@@ -26,19 +34,18 @@ export default function CommentModal() {
     })
   }, [postId, db])
 
-  const sendComment = async () => {}
-  //example firebase from sending Post (from Input component); modify for sending comment above.
-  // const sendPost = async () => {
-  //   if (loading) return
-  //   setLoading(true)
-  //   const docRef = await addDoc(collection(db, 'posts'), {
-  //     id: currentUser.uid,
-  //     text: input,
-  //     userImg: currentUser.userImg,
-  //     timestamp: serverTimestamp(),
-  //     name: currentUser.name,
-  //     username: currentUser.username,
-  //   })
+  const sendComment = async () => {
+    await addDoc(collection(db, 'posts', postId, 'comments'), {
+      comment: input,
+      name: currentUser.name,
+      username: currentUser.username,
+      userImg: currentUser.userImg,
+      timestamp: serverTimestamp(),
+    })
+    setOpen(false)
+    setInput('')
+    router.push(`/posts/${postId}`)
+  }
 
   return (
     <div>
@@ -62,10 +69,7 @@ export default function CommentModal() {
             <div className='flex p-2 items-center space-x-1 relative'>
               <span className='absolute w-0.5 h-full z-[-1] bg-gray-300 left-8 top-11' />
               <Image
-                src={
-                  // currentUser ? currentUser?.userImg : '/user-default-img.png'
-                  post?.data()?.userImg
-                }
+                src={post?.data()?.userImg}
                 alt='user profile image'
                 width='100'
                 height='100'

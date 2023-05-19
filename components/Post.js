@@ -30,6 +30,7 @@ export default function Post({ post }) {
   const [postId, setPostId] = useRecoilState(postIdState)
   const [likes, setLikes] = useState([])
   const [hasLiked, setHasLiked] = useState(false)
+  const [commentCount, setCommentCount] = useState([])
   const router = useRouter()
 
   //get likes info from firestore
@@ -44,6 +45,13 @@ export default function Post({ post }) {
   useEffect(() => {
     setHasLiked(likes.findIndex((like) => like.id === currentUser?.uid) !== -1)
   }, [likes, currentUser])
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      collection(db, 'posts', post.id, 'comments'),
+      (snapshot) => setCommentCount(snapshot.docs)
+    )
+  }, [db, post])
 
   const likePost = async () => {
     if (currentUser) {
@@ -109,17 +117,24 @@ export default function Post({ post }) {
           />
         )}
         <div className='flex justify-between text-gray-500 p-2'>
-          <ChatBubbleLeftIcon
-            className='h-9 w-10 hoverEffect p-2 hover:text-sky-500 hover:bg-sky-100'
-            onClick={() => {
-              if (!currentUser) {
-                router.push('/auth/SignIn')
-              } else {
-                setOpen(!open)
-                setPostId(post.id)
-              }
-            }}
-          />
+          <div className='flex items-center'>
+            <ChatBubbleLeftIcon
+              className='h-9 w-10 hoverEffect p-2 hover:text-sky-500 hover:bg-sky-100'
+              onClick={() => {
+                if (!currentUser) {
+                  router.push('/auth/SignIn')
+                } else {
+                  setOpen(!open)
+                  setPostId(post.id)
+                }
+              }}
+            />
+            {commentCount?.length > 0 && (
+              <span className='text-gray-600 text-sm select-none'>
+                {commentCount?.length}
+              </span>
+            )}
+          </div>
           {currentUser?.id === post?.data().uid && (
             <TrashIcon
               className='h-9 w-9 hoverEffect p-2 hover:text-red-600 hover:bg-red-100'
