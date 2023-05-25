@@ -32,7 +32,7 @@ export default function Home({ newsResults, randomUserList }) {
 
 export async function getServerSideProps() {
   const newsResults = await fetch(
-    'https://saurav.tech/NewsAPI/top-headlines/category/technology/us.json'
+    `https://newsapi.org/v2/top-headlines?country=us&apiKey=${process.env.NEWS_API_KEY}`
   ).then((res) => res.json())
 
   const randomUserList = await fetch(

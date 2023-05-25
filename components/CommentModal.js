@@ -86,7 +86,7 @@ export default function CommentModal() {
               </span>
             </div>
             <p className='text-gray-500 text-[15px] sm:text-[16px] ml-16 mb-2'>
-              {post?.data().text}
+              {post?.data()?.text}
             </p>
             {/* comment input */}
             <div className='flex p-3 space-x-3'>
