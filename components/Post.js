@@ -82,7 +82,6 @@ export default function Post({ post, id }) {
   return (
     <div className='flex p-3 cursor-pointer border-b border-gray-200'>
       <Image
-        // src={currentUser ? currentUser?.userImg : '/user-default-img.png'} currently logged in user
         src={post?.data()?.userImg} //userImg from the post in db
         alt='user profile image'
         width='100'
@@ -137,8 +136,6 @@ export default function Post({ post, id }) {
               </span>
             )}
           </div>
-          {console.log('currentUser in Post:', currentUser)}
-          {console.log('post?.data()?.id in Post:', post?.data()?.id)}
           {currentUser?.uid === post?.data()?.id && (
             <TrashIcon
               className='h-9 w-9 hoverEffect p-2 hover:text-red-600 hover:bg-red-100'
