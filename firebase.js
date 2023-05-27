@@ -8,7 +8,7 @@ import { getStorage } from 'firebase/storage'
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: 'twitter-next-4eed2.firebaseapp.com',
+  authDomain: '/twitter-next-pink.vercel.app/',
   projectId: 'twitter-next-4eed2',
   storageBucket: 'twitter-next-4eed2.appspot.com',
   messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MSG_SENDER_ID,
