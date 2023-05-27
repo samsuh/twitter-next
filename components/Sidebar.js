@@ -21,7 +21,6 @@ import { useRouter } from 'next/router'
 export default function Sidebar() {
   const router = useRouter()
   const [currentUser, setCurrentUser] = useRecoilState(userState)
-  console.log(currentUser)
   const auth = getAuth()
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -46,7 +45,7 @@ export default function Sidebar() {
     <div className='hidden sm:flex flex-col p-2 xl:items-start fixed h-full xl:ml-24'>
       {/* Logo */}
       <div className='hoverEffect hover:bg-blue-100 px-1'>
-        <Image src='/twitter-logo.png' width='50' height='50' />
+        <Image src='/twitter-logo.png' alt='logo' width='50' height='50' />
       </div>
       {/* Menu */}
       <div className='mt-4 mb-2.5 xl:items-start'>

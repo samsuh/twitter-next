@@ -19,10 +19,9 @@ import {
   onSnapshot,
   setDoc,
 } from 'firebase/firestore'
-import { db, storage } from '../firebase'
+import { db } from '../firebase'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { deleteObject, ref } from 'firebase/storage'
 
 export default function Comment({ originalPostId, comment, commentId }) {
   const [open, setOpen] = useRecoilState(modalState)
@@ -38,9 +37,6 @@ export default function Comment({ originalPostId, comment, commentId }) {
       collection(db, 'posts', originalPostId, 'comments', commentId, 'likes'),
       (snapshot) => setLikes(snapshot.docs)
     )
-    console.log('originalPostId:', originalPostId)
-    // console.log('commentId:', commentId)
-    console.log('db:', db)
   }, [db, originalPostId, commentId])
 
   //check if currently logged in user has already liked this post

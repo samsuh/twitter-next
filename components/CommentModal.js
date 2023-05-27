@@ -115,12 +115,6 @@ export default function CommentModal() {
                   <div className='flex'>
                     <div>
                       <PhotoIcon className='h-10 w-10 hoverEffect p-2 text-sky-500 hover:bg-sky-100' />
-                      {/* <input
-                        type='file'
-                        hidden
-                        ref={filePickerRef}
-                        onChange={addImageToPost}
-                      /> */}
                     </div>
                     <FaceSmileIcon className='h-10 w-10 hoverEffect p-2 text-sky-500 hover:bg-sky-100' />
                   </div>

@@ -112,6 +112,7 @@ export default function Post({ post, id }) {
         {post?.data()?.image && (
           <Image
             src={post?.data()?.image}
+            alt='post image'
             width='500'
             height='350'
             className='rounded-2xl mr-2'
@@ -136,7 +137,9 @@ export default function Post({ post, id }) {
               </span>
             )}
           </div>
-          {currentUser?.id === post?.data()?.id && (
+          {console.log('currentUser in Post:', currentUser)}
+          {console.log('post?.data()?.id in Post:', post?.data()?.id)}
+          {currentUser?.uid === post?.data()?.id && (
             <TrashIcon
               className='h-9 w-9 hoverEffect p-2 hover:text-red-600 hover:bg-red-100'
               onClick={deletePost}
