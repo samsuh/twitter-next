@@ -63,7 +63,7 @@ export default function PostPage({ newsResults, randomUserList }) {
                 key={comment.id}
                 commentId={comment.id}
                 comment={comment.data()}
-                originPostId={id}
+                originalPostId={id}
               />
             ))}
         </div>

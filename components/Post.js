@@ -136,7 +136,7 @@ export default function Post({ post, id }) {
               </span>
             )}
           </div>
-          {currentUser?.id === post?.data()?.uid && (
+          {currentUser?.id === post?.data()?.id && (
             <TrashIcon
               className='h-9 w-9 hoverEffect p-2 hover:text-red-600 hover:bg-red-100'
               onClick={deletePost}

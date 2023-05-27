@@ -33,12 +33,15 @@ export default function Comment({ originalPostId, comment, commentId }) {
   const router = useRouter()
 
   //get likes info from firestore
-  // useEffect(() => {
-  //   const unsubscribe = onSnapshot(
-  //     collection(db, 'posts', originalPostId, 'comments', commentId, 'likes'),
-  //     (snapshot) => setLikes(snapshot.docs)
-  //   )
-  // }, [db, originalPostId, commentId])
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      collection(db, 'posts', originalPostId, 'comments', commentId, 'likes'),
+      (snapshot) => setLikes(snapshot.docs)
+    )
+    console.log('originalPostId:', originalPostId)
+    // console.log('commentId:', commentId)
+    console.log('db:', db)
+  }, [db, originalPostId, commentId])
 
   //check if currently logged in user has already liked this post
   useEffect(() => {
