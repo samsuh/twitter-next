@@ -99,7 +99,7 @@ export default function Input() {
                   className='h-7 text-black absolute cursor-pointer bg-white rounded-full m-2'
                   onClick={() => setSelectedFile(null)}
                 />
-                <img
+                <Image
                   src={selectedFile}
                   alt='selected image'
                   className={`${loading && 'animate-pulse'}`}
